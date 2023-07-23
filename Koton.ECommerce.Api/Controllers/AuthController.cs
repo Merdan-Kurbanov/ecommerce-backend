@@ -16,7 +16,7 @@ namespace Koton.ECommerce.Api.Controllers
         }
 
         [HttpPost("SignIn")]
-        public async Task<IActionResult> GetToken([FromBody] UserInfoDto userInfoDto)
+        public async Task<IActionResult> GetToken([FromBody] LoginRequestDto userInfoDto)
         {
             var token = await _loginService.LoginAsync(userInfoDto.Email, userInfoDto.PasswordHash);
             if(token.IsSuccess)

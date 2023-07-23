@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Koton.ECommerce.Core.DTOs;
 
 namespace Koton.ECommerce.Business.Services.Concrete
 {
@@ -19,21 +20,25 @@ namespace Koton.ECommerce.Business.Services.Concrete
         }
 
 
-        public async Task<Result<string>> LoginAsync(string username, string password)
+        public async Task<Result<LoginResultDto>> LoginAsync(string username, string password)
         {
-            
-
             var userInfo = await _loginRepository.GetUserInfoAsync(username, password);
             if (userInfo != null)
             {
                 // User found, generate JWT token and return it as a result.
                 var token = GenerateJwtToken(username);
-                return new Result<string> { IsSuccess = true, Data = token, Message = "Success" };
+                var loginResult = new LoginResultDto
+                {
+                    Token = token,
+                    RoleCode = userInfo.RoleCode,
+                    RoleName = userInfo.RoleName
+                };
+                return new Result<LoginResultDto> { IsSuccess = true, Data = loginResult, Message = "Success" };
             }
             else
-                return new Result<string> { IsSuccess = false, Message = "User Bulunamadı" };
-
+                return new Result<LoginResultDto> { IsSuccess = false, Message = "User Bulunamadı" };
         }
+
 
         private string GenerateJwtToken(string username)
         {
