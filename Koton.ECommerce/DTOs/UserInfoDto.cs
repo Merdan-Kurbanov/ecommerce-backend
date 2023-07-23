@@ -3,8 +3,11 @@
 
     public class UserInfoDto
     {
-        //public string UserName { get; set; }
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
         public string Email { get; set; }
-        public  string PasswordHash { get; set; }
+        public string RoleCode { get; set; }
+        public string RoleName { get; set; }
     }
+
 }

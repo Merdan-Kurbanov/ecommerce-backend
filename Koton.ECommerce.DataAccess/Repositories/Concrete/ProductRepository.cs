@@ -19,7 +19,7 @@ namespace Koton.ECommerce.DataAccess.Repositories.Concrete
 
             using (var connection = new SqlConnection(connStr))
             {
-                // Retrieve all products.
+                
                 var products = await connection.QueryAsync<GetProductDto>("SELECT * FROM Products");
 
                 return products;
@@ -44,8 +44,7 @@ namespace Koton.ECommerce.DataAccess.Repositories.Concrete
             var connStr = _config.GetSection("ConnectionStrings:ConnStr").Value;
             using (var connection = new SqlConnection(connStr))
             {
-                // Insert the new product into the database.
-                //var productId = await connection.ExecuteScalarAsync<int>("INSERT INTO Products (Id,Name,Price,DiscountPrice, Description,ImageUrl,Brand,UserId ) VALUES (@Id,@Name,@Price,@DiscountPrice, @Description,@ImageUrl,@Brand,@UserId); SELECT SCOPE_IDENTITY();", product);
+                
                 var productId = await connection.ExecuteScalarAsync<int>("INSERT INTO Products (Id,Name,Price,DiscountPrice, Description,ImageUrl,Brand,UserId ) OUTPUT INSERTED.Id VALUES (@Id,@Name,@Price,@DiscountPrice, @Description,@ImageUrl,@Brand,@UserId);", product);
 
 
@@ -61,11 +60,11 @@ namespace Koton.ECommerce.DataAccess.Repositories.Concrete
             var connStr = _config.GetSection("ConnectionStrings:ConnStr").Value;
             using (var connection = new SqlConnection(connStr))
             {
-                // Update the product in the database.
+                
                 await connection.ExecuteAsync("UPDATE Products SET Name = @Name, Description = @Description, Price = @Price WHERE Id = @Id",
                    new { Id = id, product.Name, product.Description, product.Price });
 
-                // Retrieve the updated product.
+                
                 var updatedProduct = await GetProductById(id);
 
                 return updatedProduct;
